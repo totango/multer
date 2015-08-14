@@ -16,6 +16,11 @@ exports.submitForm = function submitForm (multer, form, cb) {
 
     var req = new stream.PassThrough()
 
+    req.complete = false
+    form.once('end', function () {
+      req.complete = true
+    })
+
     form.pipe(req)
     req.headers = {
       'content-type': 'multipart/form-data; boundary=' + form.getBoundary(),
